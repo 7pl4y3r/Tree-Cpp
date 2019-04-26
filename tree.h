@@ -1,5 +1,6 @@
 #include <iostream>
 
+
 class Tree {
 
     public:
@@ -14,9 +15,15 @@ class Tree {
 
     private: Node *root = 0;
 
+    private: 
+        const int leaf = 1;
+        const int oneChild = 2;
+        const int twoChildren = 3;
+
+
     public: void add(int id) {
 
-        if (root == 0) {
+        if (!root) {
 
             root = new Node;
             root->id = id;
@@ -90,6 +97,82 @@ class Tree {
             return findNodeById(node->right, id);
         
         return 0;
+    }
+
+
+    Node *findTargetParent(Node *node, int id) {
+
+        if (node->left->id == id || node->right->id == id)
+            return node;
+
+        if (node->id > id && node->left)
+            return findTargetParent(node->left, id);
+
+        if (node->right)
+            return findTargetParent(node->right, id);
+
+        return 0;
+    }
+
+
+    private: void deleteLeaf(Node *parent, Node *child) {
+
+        if (parent->right == child)
+            parent->right = 0;
+        else
+            parent->left = 0;
+
+
+        delete child;
+    }
+
+
+    private: void deleteOnlyChild(Node *parent, Node *child) {
+
+
+        if (parent->left == child) 
+            parent->left = ((child->left) ? child->left : child->right);
+         else 
+            parent->right = ((child->left) ? child->left : child->right);
+
+        delete child;
+    }
+
+
+    private: int getNodeDeletionCase(Node *target) {
+
+        if (!target->left && !target->right)
+            return leaf;
+
+        if ((target->left && !target->right) || (!target->left && target->right))
+            return oneChild;
+
+        return twoChildren;
+    }
+
+
+    public: void deleteNode(int id) {
+
+        Node *parent = findTargetParent(root, id);
+        Node *child = ((parent->left->id == id) ? parent->left : parent->right);
+
+        if (!child) {
+            std::cout << "Node could not be found!\n";
+            return;
+        }
+
+
+        switch (getNodeDeletionCase(child)) {
+
+            case 1: deleteLeaf(parent, child); break;
+
+            case 2: deleteOnlyChild(parent, child); break;
+
+            case 3: break;
+
+        }
+
+
     }
 
 };
