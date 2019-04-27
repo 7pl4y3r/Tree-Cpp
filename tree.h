@@ -85,6 +85,15 @@ class Tree {
     }
 
 
+    Node *getParentOfSmallestNode(Node *node) {
+
+        while (node->left->left)
+            node = node->left;
+
+        return node;
+    }
+
+
     Node *findNodeById(Node *node, int id) {
 
         if (node->id == id)
@@ -100,16 +109,17 @@ class Tree {
     }
 
 
-    Node *findTargetParent(Node *node, int id) {
+    Node *findParent(Node *node, int id) {
 
-        if (node->left->id == id || node->right->id == id)
+        if ((node->left && node->left->id == id) || (node->right && node->right->id == id)) 
             return node;
-
+        
+        
         if (node->id > id && node->left)
-            return findTargetParent(node->left, id);
+            return findParent(node->left, id);
 
-        if (node->right)
-            return findTargetParent(node->right, id);
+        else if (node->right)
+            return findParent(node->right, id);
 
         return 0;
     }
@@ -139,6 +149,13 @@ class Tree {
     }
 
 
+    private: void deleteTwoChildren(Node *parent, Node *child) {
+
+        
+
+    }
+
+
     private: int getNodeDeletionCase(Node *target) {
 
         if (!target->left && !target->right)
@@ -153,8 +170,15 @@ class Tree {
 
     public: void deleteNode(int id) {
 
-        Node *parent = findTargetParent(root, id);
-        Node *child = ((parent->left->id == id) ? parent->left : parent->right);
+        Node *parent = findParent(root, id);
+        Node *child = 0;
+
+        if (parent->right && parent->right->id == id)
+            child = parent->right;
+
+        else if (parent->right)
+            child = parent->right;
+
 
         if (!child) {
             std::cout << "Node could not be found!\n";
@@ -168,10 +192,9 @@ class Tree {
 
             case 2: deleteOnlyChild(parent, child); break;
 
-            case 3: break;
+            case 3: deleteTwoChildren(parent, child); break;
 
         }
-
 
     }
 
