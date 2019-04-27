@@ -151,8 +151,23 @@ class Tree {
 
     private: void deleteTwoChildren(Node *parent, Node *child) {
 
-        
+        Node *smallerParent = getParentOfSmallestNode(child->right);
+        Node *startSubTree = child->right;
 
+        if (parent->left == child) {
+
+            parent->left = smallerParent->left;
+            parent->left->right = startSubTree;
+
+        } else {
+
+            parent->right = smallerParent->left;
+            parent->right->right = startSubTree;
+
+        }
+
+        smallerParent->left = 0;
+        delete child;
     }
 
 
