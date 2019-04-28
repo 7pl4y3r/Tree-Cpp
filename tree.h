@@ -71,11 +71,11 @@ class Tree {
 
         std::cout << iterator->id << ' ';
 
-        if (iterator->right)
-            printTree(iterator->right);
-
         if (iterator->left)
             printTree(iterator->left);
+
+        if (iterator->right)
+            printTree(iterator->right);
 
     }
 
@@ -151,10 +151,10 @@ class Tree {
 
     private: void deleteTwoChildren(Node *parent, Node *child) {
 
-        Node *smallerParent = getParentOfSmallestNode(child->right);
+        Node *smallerParent = getParentOfSmallestNode(child);
         Node *startSubTree = child->right;
 
-        if (parent->left == child) {
+        if (parent->left && parent->left == child) {
 
             parent->left = smallerParent->left;
             parent->left->right = startSubTree;
@@ -191,8 +191,8 @@ class Tree {
         if (parent->right && parent->right->id == id)
             child = parent->right;
 
-        else if (parent->right)
-            child = parent->right;
+        else if (parent->left)
+            child = parent->left;
 
 
         if (!child) {
