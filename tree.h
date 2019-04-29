@@ -13,9 +13,8 @@ class Tree {
 
         };
 
-    private: Node *root = 0;
-
     private: 
+        Node *root = 0;
         const int leaf = 1;
         const int oneChild = 2;
         const int twoChildren = 3;
@@ -80,12 +79,12 @@ class Tree {
     }
 
 
-    Node *getRoot() {
+    public: Node *getRoot() {
         return root;
     }
 
 
-    Node *getParentOfSmallestNode(Node *node) {
+    public: Node *getParentOfSmallestNode(Node *node) {
 
         while (node->left->left)
             node = node->left;
@@ -94,7 +93,7 @@ class Tree {
     }
 
 
-    Node *findNodeById(Node *node, int id) {
+    public: Node *findNodeById(Node *node, int id) {
 
         if (node->id == id)
             return node;
@@ -109,7 +108,7 @@ class Tree {
     }
 
 
-    Node *findParent(Node *node, int id) {
+    public: Node *findParent(Node *node, int id) {
 
         if ((node->left && node->left->id == id) || (node->right && node->right->id == id)) 
             return node;
